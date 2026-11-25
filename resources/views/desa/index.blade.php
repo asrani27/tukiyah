@@ -50,7 +50,7 @@
                             <td class="px-4 py-3 text-slate-600">{{ $desa->kepala_desa ?? '-' }}</td>
                             <td class="px-4 py-3 text-center">
                                 <span class="px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 font-bold border border-emerald-200">
-                                    {{ $desa->penduduks_count }}
+                                    {{ $desa->penduduk_tetap_count }}
                                 </span>
                             </td>
                             <td class="px-4 py-3 text-center">

@@ -44,12 +44,15 @@ class DesaController extends Controller
     {
         $validated = $request->validate([
             'nama_desa' => ['required', 'string', 'max:50', 'unique:desa,nama_desa'],
+            'kode_desa' => ['required', 'string', 'max:20', 'unique:desa,kode_desa'],
             'kepala_desa' => ['required', 'string', 'max:100'],
             'telp' => ['nullable', 'string', 'max:20'],
             'alamat' => ['nullable', 'string'],
         ], [
             'nama_desa.required' => 'Nama desa wajib diisi.',
             'nama_desa.unique' => 'Nama desa sudah terdaftar.',
+            'kode_desa.required' => 'Kode desa wajib diisi.',
+            'kode_desa.unique' => 'Kode desa sudah terdaftar.',
             'kepala_desa.required' => 'Nama kepala desa wajib diisi.',
         ]);
 
@@ -74,12 +77,15 @@ class DesaController extends Controller
     {
         $validated = $request->validate([
             'nama_desa' => ['required', 'string', 'max:50', 'unique:desa,nama_desa,'.$desa->id],
+            'kode_desa' => ['required', 'string', 'max:20', 'unique:desa,kode_desa,'.$desa->id],
             'kepala_desa' => ['required', 'string', 'max:100'],
             'telp' => ['nullable', 'string', 'max:20'],
             'alamat' => ['nullable', 'string'],
         ], [
             'nama_desa.required' => 'Nama desa wajib diisi.',
             'nama_desa.unique' => 'Nama desa sudah terdaftar.',
+            'kode_desa.required' => 'Kode desa wajib diisi.',
+            'kode_desa.unique' => 'Kode desa sudah terdaftar.',
             'kepala_desa.required' => 'Nama kepala desa wajib diisi.',
         ]);
 

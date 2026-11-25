@@ -23,6 +23,7 @@ class Desa extends Model
      * @var list<string>
      */
     protected $fillable = [
+        'kode_desa',
         'nama_desa',
         'kepala_desa',
         'telp',

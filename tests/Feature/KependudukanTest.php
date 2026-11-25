@@ -69,6 +69,7 @@ class KependudukanTest extends TestCase
 
         // 2. Simpan desa baru
         $desaData = [
+            'kode_desa' => '63.01.05.2014',
             'nama_desa' => 'Bati-Bati Barat',
             'kepala_desa' => 'H. Ahmad Fauzi',
             'telp' => '081234567890',
@@ -92,6 +93,7 @@ class KependudukanTest extends TestCase
 
         // 5. Update data desa
         $updateData = [
+            'kode_desa' => '63.01.05.2014',
             'nama_desa' => 'Bati-Bati Indah',
             'kepala_desa' => 'H. Ahmad Fauzi, S.Sos',
             'telp' => '081234567899',
