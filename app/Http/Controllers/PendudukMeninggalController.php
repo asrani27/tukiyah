@@ -49,6 +49,18 @@ class PendudukMeninggalController extends Controller
             ->orderBy('nama_lengkap')
             ->get();
 
+        $pendudukData = $pendudukTetap->mapWithKeys(fn (Penduduk $p) => [$p->id => [
+            'nik' => $p->nik,
+            'nama_lengkap' => $p->nama_lengkap,
+            'tempat_lahir' => $p->tempat_lahir,
+            'tanggal_lahir' => $p->tanggal_lahir?->format('d-m-Y'),
+            'jenis_kelamin' => $p->jenis_kelamin === 'L' ? 'Laki-Laki' : ($p->jenis_kelamin === 'P' ? 'Perempuan' : $p->jenis_kelamin),
+            'agama' => $p->agama,
+            'status_perkawinan' => $p->status_perkawinan,
+            'pendidikan_terakhir' => $p->pendidikan_terakhir,
+            'alamat' => $p->alamat,
+        ]]);
+
         $prefix = 'KMT-'.date('Ym').'-';
         $lastRecord = PendudukMeninggal::where('kode_kematian', 'like', "{$prefix}%")
             ->orderBy('kode_kematian', 'desc')
@@ -61,7 +73,7 @@ class PendudukMeninggalController extends Controller
         }
         $autoKode = $prefix.str_pad((string) $nextNumber, 4, '0', STR_PAD_LEFT);
 
-        return view('mutasi.meninggal.create', compact('pendudukTetap', 'autoKode'));
+        return view('mutasi.meninggal.create', compact('pendudukTetap', 'pendudukData', 'autoKode'));
     }
 
     /**
