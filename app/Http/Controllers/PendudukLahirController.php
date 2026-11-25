@@ -7,6 +7,7 @@ use App\Models\Penduduk;
 use App\Models\PendudukLahir;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 use Illuminate\Validation\Rule;
 use Illuminate\View\View;
 
@@ -49,20 +50,7 @@ class PendudukLahirController extends Controller
     {
         $desas = Desa::orderBy('nama_desa')->get();
 
-        $ibu = Penduduk::tetap()
-            ->where('jenis_kelamin', 'P')
-            ->orderBy('nama_lengkap')
-            ->get(['nik', 'nama_lengkap', 'tempat_lahir', 'tanggal_lahir', 'agama', 'status_perkawinan', 'pendidikan_terakhir', 'alamat']);
-
-        $ibuData = $ibu->mapWithKeys(fn (Penduduk $p) => [$p->nik => [
-            'nama_lengkap' => $p->nama_lengkap,
-            'tempat_lahir' => $p->tempat_lahir,
-            'tanggal_lahir' => $p->tanggal_lahir?->format('d-m-Y'),
-            'agama' => $p->agama,
-            'status_perkawinan' => $p->status_perkawinan,
-            'pendidikan_terakhir' => $p->pendidikan_terakhir,
-            'alamat' => $p->alamat,
-        ]]);
+        [$ibu, $ibuData] = $this->ibuOptions();
 
         $prefix = 'LHR-'.date('Ym').'-';
         $lastRecord = PendudukLahir::where('kode_kelahiran', 'like', "{$prefix}%")
@@ -116,8 +104,9 @@ class PendudukLahirController extends Controller
     public function edit(PendudukLahir $lahir): View
     {
         $desas = Desa::orderBy('nama_desa')->get();
+        [$ibu, $ibuData] = $this->ibuOptions();
 
-        return view('mutasi.lahir.edit', compact('lahir', 'desas'));
+        return view('mutasi.lahir.edit', compact('lahir', 'desas', 'ibu', 'ibuData'));
     }
 
     /**
@@ -156,5 +145,30 @@ class PendudukLahirController extends Controller
 
         return redirect()->route('mutasi.lahir.index')
             ->with('success', 'Data kelahiran "'.$nama.'" berhasil dihapus.');
+    }
+
+    /**
+     * Load daftar ibu (penduduk perempuan berstatus tetap) beserta data info-nya.
+     *
+     * @return array{0: Collection, 1: Collection}
+     */
+    private function ibuOptions(): array
+    {
+        $ibu = Penduduk::tetap()
+            ->where('jenis_kelamin', 'P')
+            ->orderBy('nama_lengkap')
+            ->get(['nik', 'nama_lengkap', 'tempat_lahir', 'tanggal_lahir', 'agama', 'status_perkawinan', 'pendidikan_terakhir', 'alamat']);
+
+        $ibuData = $ibu->mapWithKeys(fn (Penduduk $p) => [$p->nik => [
+            'nama_lengkap' => $p->nama_lengkap,
+            'tempat_lahir' => $p->tempat_lahir,
+            'tanggal_lahir' => $p->tanggal_lahir?->format('d-m-Y'),
+            'agama' => $p->agama,
+            'status_perkawinan' => $p->status_perkawinan,
+            'pendidikan_terakhir' => $p->pendidikan_terakhir,
+            'alamat' => $p->alamat,
+        ]]);
+
+        return [$ibu, $ibuData];
     }
 }

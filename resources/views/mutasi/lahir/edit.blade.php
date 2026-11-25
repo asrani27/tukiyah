@@ -30,6 +30,32 @@
                     </select>
                 </div>
                 <div class="md:col-span-2">
+                    <label class="block font-semibold uppercase mb-1">Ibu (Penduduk yang Melahirkan)</label>
+                    <select name="nik_ibu" id="nik_ibu" class="w-full px-3 py-2 rounded-lg border border-slate-300 focus:outline-none">
+                        <option value="">-- Pilih Ibu --</option>
+                        @foreach($ibu as $ibudata)
+                            <option value="{{ $ibudata->nik }}" {{ old('nik_ibu', $lahir->nik_ibu) == $ibudata->nik ? 'selected' : '' }}>{{ $ibudata->nama_lengkap }} ({{ $ibudata->nik }})</option>
+                        @endforeach
+                        @if($lahir->nik_ibu && !$ibu->contains('nik', $lahir->nik_ibu))
+                            <option value="{{ $lahir->nik_ibu }}" {{ old('nik_ibu', $lahir->nik_ibu) == $lahir->nik_ibu ? 'selected' : '' }}>{{ $lahir->nik_ibu }} (NIK tersimpan)</option>
+                        @endif
+                    </select>
+                </div>
+                <div class="md:col-span-2 hidden" id="infoIbu">
+                    <div class="rounded-lg border border-emerald-200 bg-emerald-50 p-4 space-y-2">
+                        <h3 class="font-bold text-emerald-800 uppercase text-[11px] tracking-wide">Informasi Ibu</h3>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-1.5 text-[11px] text-slate-700">
+                            <div><span class="font-semibold">Nama:</span> <span id="infoNama">-</span></div>
+                            <div><span class="font-semibold">Tempat Lahir:</span> <span id="infoTempatLahir">-</span></div>
+                            <div><span class="font-semibold">Tanggal Lahir:</span> <span id="infoTanggalLahir">-</span></div>
+                            <div><span class="font-semibold">Agama:</span> <span id="infoAgama">-</span></div>
+                            <div><span class="font-semibold">Status:</span> <span id="infoStatus">-</span></div>
+                            <div><span class="font-semibold">Pendidikan:</span> <span id="infoPendidikan">-</span></div>
+                            <div class="sm:col-span-2"><span class="font-semibold">Alamat:</span> <span id="infoAlamat">-</span></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="md:col-span-2">
                     <label class="block font-semibold uppercase mb-1">Nama Bayi *</label>
                     <input type="text" name="nama_bayi" value="{{ old('nama_bayi', $lahir->nama_bayi) }}" required class="w-full px-3 py-2 rounded-lg border border-slate-300 focus:outline-none">
                 </div>
@@ -49,10 +75,6 @@
                     <input type="date" name="tanggal_lahir" value="{{ old('tanggal_lahir', $lahir->tanggal_lahir ? $lahir->tanggal_lahir->format('Y-m-d') : '') }}" required class="w-full px-3 py-2 rounded-lg border border-slate-300 focus:outline-none">
                 </div>
                 <div>
-                    <label class="block font-semibold uppercase mb-1">NIK Ibu (16 Digit)</label>
-                    <input type="text" name="nik_ibu" maxlength="16" value="{{ old('nik_ibu', $lahir->nik_ibu) }}" class="w-full px-3 py-2 rounded-lg border border-slate-300 font-mono focus:outline-none">
-                </div>
-                <div>
                     <label class="block font-semibold uppercase mb-1">NIK Ayah (16 Digit)</label>
                     <input type="text" name="nik_ayah" maxlength="16" value="{{ old('nik_ayah', $lahir->nik_ayah) }}" class="w-full px-3 py-2 rounded-lg border border-slate-300 font-mono focus:outline-none">
                 </div>
@@ -69,4 +91,45 @@
         </form>
     </div>
 </div>
+
+<script>
+    const ibuData = @json($ibuData);
+    const ibuSelect = document.getElementById('nik_ibu');
+    const infoPanel = document.getElementById('infoIbu');
+
+    function renderInfoIbu() {
+        const data = ibuSelect ? ibuData[ibuSelect.value] : null;
+
+        if (!data) {
+            if (infoPanel) {
+                infoPanel.classList.add('hidden');
+            }
+            return;
+        }
+
+        if (infoPanel) {
+            infoPanel.classList.remove('hidden');
+        }
+
+        const setText = (id, value) => {
+            const el = document.getElementById(id);
+            if (el) {
+                el.textContent = value || '-';
+            }
+        };
+
+        setText('infoNama', data.nama_lengkap);
+        setText('infoTempatLahir', data.tempat_lahir);
+        setText('infoTanggalLahir', data.tanggal_lahir);
+        setText('infoAgama', data.agama);
+        setText('infoStatus', data.status_perkawinan);
+        setText('infoPendidikan', data.pendidikan_terakhir);
+        setText('infoAlamat', data.alamat);
+    }
+
+    if (ibuSelect) {
+        ibuSelect.addEventListener('change', renderInfoIbu);
+        renderInfoIbu();
+    }
+</script>
 @endsection
