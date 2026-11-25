@@ -48,6 +48,22 @@
                     </select>
                 </div>
                 <div>
+                    <label class="block font-semibold uppercase mb-1">Status Perkawinan *</label>
+                    <select name="status_perkawinan" required class="w-full px-3 py-2 rounded-lg border border-slate-300 focus:outline-none">
+                        @foreach(['Belum Kawin', 'Kawin', 'Cerai Hidup', 'Cerai Mati'] as $sp)
+                            <option value="{{ $sp }}" {{ old('status_perkawinan') == $sp ? 'selected' : '' }}>{{ $sp }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div>
+                    <label class="block font-semibold uppercase mb-1">Pendidikan Terakhir</label>
+                    <select name="pendidikan_terakhir" class="w-full px-3 py-2 rounded-lg border border-slate-300 focus:outline-none">
+                        @foreach(['Tidak / Belum Sekolah', 'SD / Sederajat', 'SLTP / Sederajat', 'SLTA / Sederajat', 'Diploma I / II / III', 'Diploma IV / S1', 'S2', 'S3'] as $pend)
+                            <option value="{{ $pend }}" {{ old('pendidikan_terakhir', 'SLTA / Sederajat') == $pend ? 'selected' : '' }}>{{ $pend }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div>
                     <label class="block font-semibold uppercase mb-1">Desa Tujuan di Bati-Bati *</label>
                     <select name="desa_id" required class="w-full px-3 py-2 rounded-lg border border-slate-300 focus:outline-none">
                         <option value="">-- Pilih Desa Tujuan --</option>

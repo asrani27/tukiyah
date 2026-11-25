@@ -30,6 +30,8 @@ class PendudukPendatang extends Model
         'tanggal_lahir',
         'jenis_kelamin',
         'agama',
+        'status_perkawinan',
+        'pendidikan_terakhir',
         'alamat_asal',
         'tanggal_datang',
         'telp',

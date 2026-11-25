@@ -27,6 +27,7 @@ class PendudukLahir extends Model
         'desa_id',
         'nik_ibu',
         'nik_ayah',
+        'nama_ayah',
         'nama_bayi',
         'tempat_lahir',
         'tanggal_lahir',

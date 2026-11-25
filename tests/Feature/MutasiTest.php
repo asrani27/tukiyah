@@ -219,6 +219,8 @@ class MutasiTest extends TestCase
             'tanggal_lahir' => '1990-10-20',
             'jenis_kelamin' => 'L',
             'agama' => 'Islam',
+            'status_perkawinan' => 'Kawin',
+            'pendidikan_terakhir' => 'SLTA / Sederajat',
             'alamat_asal' => 'Jl. Cibadak No. 12, Bandung Barat',
             'tanggal_datang' => '2026-10-01',
             'telp' => '081399887766',
@@ -226,7 +228,11 @@ class MutasiTest extends TestCase
 
         $resStore = $this->actingAs($this->user)->post('/mutasi/pendatang', $pendatangData);
         $resStore->assertRedirect('/mutasi/pendatang');
-        $this->assertDatabaseHas('penduduk_pendatang', ['nik' => '3201012010900005']);
+        $this->assertDatabaseHas('penduduk_pendatang', [
+            'nik' => '3201012010900005',
+            'status_perkawinan' => 'Kawin',
+            'pendidikan_terakhir' => 'SLTA / Sederajat',
+        ]);
 
         $pendatang = PendudukPendatang::where('nik', '3201012010900005')->first();
         $this->assertNotNull($pendatang);
