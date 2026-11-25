@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Desa;
+use App\Models\Penduduk;
 use App\Models\PendudukLahir;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -48,6 +49,21 @@ class PendudukLahirController extends Controller
     {
         $desas = Desa::orderBy('nama_desa')->get();
 
+        $ibu = Penduduk::tetap()
+            ->where('jenis_kelamin', 'P')
+            ->orderBy('nama_lengkap')
+            ->get(['nik', 'nama_lengkap', 'tempat_lahir', 'tanggal_lahir', 'agama', 'status_perkawinan', 'pendidikan_terakhir', 'alamat']);
+
+        $ibuData = $ibu->mapWithKeys(fn (Penduduk $p) => [$p->nik => [
+            'nama_lengkap' => $p->nama_lengkap,
+            'tempat_lahir' => $p->tempat_lahir,
+            'tanggal_lahir' => $p->tanggal_lahir?->format('d-m-Y'),
+            'agama' => $p->agama,
+            'status_perkawinan' => $p->status_perkawinan,
+            'pendidikan_terakhir' => $p->pendidikan_terakhir,
+            'alamat' => $p->alamat,
+        ]]);
+
         $prefix = 'LHR-'.date('Ym').'-';
         $lastRecord = PendudukLahir::where('kode_kelahiran', 'like', "{$prefix}%")
             ->orderBy('kode_kelahiran', 'desc')
@@ -60,7 +76,7 @@ class PendudukLahirController extends Controller
         }
         $autoKode = $prefix.str_pad((string) $nextNumber, 4, '0', STR_PAD_LEFT);
 
-        return view('mutasi.lahir.create', compact('desas', 'autoKode'));
+        return view('mutasi.lahir.create', compact('desas', 'autoKode', 'ibu', 'ibuData'));
     }
 
     /**

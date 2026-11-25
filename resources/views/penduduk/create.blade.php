@@ -117,6 +117,10 @@
                         <label class="block font-semibold text-slate-700 uppercase mb-1">Alamat Lengkap / Jalan *</label>
                         <input type="text" name="alamat" value="{{ old('alamat') }}" required class="w-full px-3 py-2 rounded-lg border border-slate-300 text-xs focus:ring-2 focus:ring-emerald-600 focus:outline-none" placeholder="Contoh: Jl. Ahmad Yani Km. 32">
                     </div>
+                    <div class="md:col-span-2">
+                        <label class="block font-semibold text-slate-700 uppercase mb-1">Telepon</label>
+                        <input type="text" name="telp" value="{{ old('telp') }}" maxlength="20" class="w-full px-3 py-2 rounded-lg border border-slate-300 text-xs focus:ring-2 focus:ring-emerald-600 focus:outline-none" placeholder="08xxxxxxxxxx">
+                    </div>
                     <div>
                         <label class="block font-semibold text-slate-700 uppercase mb-1">RT *</label>
                         <input type="text" name="rt" value="{{ old('rt', '001') }}" required maxlength="4" class="w-full px-3 py-2 rounded-lg border border-slate-300 text-xs focus:ring-2 focus:ring-emerald-600 focus:outline-none" placeholder="001">
